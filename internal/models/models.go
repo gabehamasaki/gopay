@@ -6,12 +6,12 @@ import (
 	"github.com/google/uuid"
 )
 
-type baseModel struct {
-	Id        uuid.UUID `gorm:"primaryKey; not null" json:"id"`
+type BaseModel struct {
+	Id        uuid.UUID `gorm:"primaryKey,not null" json:"id"`
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
-func (b *baseModel) GenerateId() {
+func (b *BaseModel) GenerateId() {
 	b.Id = uuid.New()
 }

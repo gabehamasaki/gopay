@@ -11,7 +11,9 @@ var (
 
 type Service[T any] interface {
 	Create(t *T) error
-	FindOne(id string, dest *T) error
+	FindOne(id string) (*T, error)
+	FindByCpf(cpf string) (*T, error)
+	FindByEmail(email string) (*T, error)
 	FindMany(dest *[]T) error
 	Save(t *T) error
 	Delete(id string) error

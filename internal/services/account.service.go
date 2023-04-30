@@ -15,7 +15,6 @@ func NewAccountService() *AccountService {
 }
 
 func (s *AccountService) Create(a *models.Account) error {
-	a.GenerateId()
 	err := db.Create(a).Error
 	if err != nil {
 		return &helpers.HttpError{
@@ -27,18 +26,50 @@ func (s *AccountService) Create(a *models.Account) error {
 	return nil
 }
 
-func (s *AccountService) FindOne(id string, dest *models.Account) error {
+func (s *AccountService) FindOne(id string) (*models.Account, error) {
+	dest := &models.Account{}
 
 	err := db.First(&dest, "id = ?", id).Error
 	if err != nil {
-		return &helpers.HttpError{
+		return nil, &helpers.HttpError{
 			Message:    "Could not be able to find account",
 			StatusCode: http.StatusInternalServerError,
 			Op:         "account-find-one-service",
 		}
 	}
 
-	return nil
+	return dest, nil
+}
+
+func (s *AccountService) FindByEmail(email string) (*models.Account, error) {
+
+	dest := &models.Account{}
+
+	err := db.First(&dest, "email = ?", email).Error
+	if err != nil {
+		return nil, &helpers.HttpError{
+			Message:    "Could not be able to find account",
+			StatusCode: http.StatusInternalServerError,
+			Op:         "account-find-one-service",
+		}
+	}
+
+	return dest, nil
+}
+
+func (s *AccountService) FindByCpf(cpf string) (*models.Account, error) {
+	dest := &models.Account{}
+
+	err := db.First(&dest, "cpf = ?", cpf).Error
+	if err != nil {
+		return nil, &helpers.HttpError{
+			Message:    "Could not be able to find account",
+			StatusCode: http.StatusInternalServerError,
+			Op:         "account-find-one-service",
+		}
+	}
+
+	return dest, nil
 }
 
 func (s *AccountService) FindMany(dest *[]models.Account) error {
@@ -69,9 +100,8 @@ func (s *AccountService) Save(a *models.Account) error {
 
 func (s *AccountService) Delete(id string) error {
 
-	acc := new(models.Account)
-
-	if err := s.FindOne(id, acc); err != nil {
+	acc, err := s.FindOne(id)
+	if err != nil {
 		return &helpers.HttpError{
 			Message:    err.Error(),
 			StatusCode: http.StatusInternalServerError,
