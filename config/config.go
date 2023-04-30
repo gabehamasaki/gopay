@@ -1,6 +1,8 @@
 package config
 
 import (
+	"fmt"
+
 	"github.com/joho/godotenv"
 	"gorm.io/gorm"
 )
@@ -15,13 +17,19 @@ func Init() error {
 	// Load environment variables
 	err := godotenv.Load()
 	if err != nil {
-		return err
+		return fmt.Errorf("error initializing dotenv: %v", err.Error())
+	}
+
+	// Initialize database
+	db, err = InicializeDatabase()
+	if err != nil {
+		return fmt.Errorf("error initializing database: %v", err.Error())
 	}
 
 	return nil
 }
 
-func GetDB() *gorm.DB {
+func GetDatabase() *gorm.DB {
 	return db
 }
 
