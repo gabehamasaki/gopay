@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+
 	"github.com/gabehamasaki/gopay/config"
 	"github.com/gabehamasaki/gopay/internal/router"
 	"github.com/gabehamasaki/gopay/internal/services"
@@ -8,11 +10,13 @@ import (
 
 func main() {
 	// Initialize Configuration
-	config.Init()
+	if err := config.Init(); err != nil {
+		fmt.Printf("Failed to initialize configuration: %v\n", err)
+		return
+	}
 
 	// Initialize Services
 	services.Initialize()
 
-	// Initialize Router
 	router.Initialize()
 }
