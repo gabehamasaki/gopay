@@ -9,12 +9,12 @@ import (
 )
 
 type AccountService struct {
-	db *gorm.DB
+	DB *gorm.DB
 }
 
 func (s *AccountService) Create(a *models.Account) error {
 	a.GenerateId()
-	err := s.db.Create(a).Error
+	err := s.DB.Create(a).Error
 	if err != nil {
 		return &helpers.HttpError{
 			Message:    "Could not be able to create account",
@@ -27,7 +27,7 @@ func (s *AccountService) Create(a *models.Account) error {
 
 func (s *AccountService) FindOne(id string, dest *models.Account) error {
 
-	err := s.db.First(&dest, "id = ?", id).Error
+	err := s.DB.First(&dest, "id = ?", id).Error
 	if err != nil {
 		return &helpers.HttpError{
 			Message:    "Could not be able to find account",
@@ -40,7 +40,7 @@ func (s *AccountService) FindOne(id string, dest *models.Account) error {
 }
 
 func (s *AccountService) FindMany(dest *[]models.Account) error {
-	err := s.db.Find(&dest, &models.Account{}).Error
+	err := s.DB.Find(&dest, &models.Account{}).Error
 	if err != nil {
 		return &helpers.HttpError{
 			Message:    "Could not be able to find all account's",
@@ -54,7 +54,7 @@ func (s *AccountService) FindMany(dest *[]models.Account) error {
 
 func (s *AccountService) Save(a *models.Account) error {
 
-	if err := s.db.Save(&a).Error; err != nil {
+	if err := s.DB.Save(&a).Error; err != nil {
 		return &helpers.HttpError{
 			Message:    "Could not be able to save this account",
 			StatusCode: http.StatusInternalServerError,
@@ -77,7 +77,7 @@ func (s *AccountService) Delete(id string) error {
 		}
 	}
 
-	if err := s.db.Delete(&acc).Error; err != nil {
+	if err := s.DB.Delete(&acc).Error; err != nil {
 		return &helpers.HttpError{
 			Message:    "Could not be able to delete this account",
 			StatusCode: http.StatusInternalServerError,
