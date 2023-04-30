@@ -19,4 +19,5 @@ type Service[T any] interface {
 
 func Initialize() {
 	db = config.GetDatabase()
+
 }
