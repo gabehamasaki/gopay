@@ -23,8 +23,8 @@ func (a *AccountController) Create(c *gin.Context) {
 	if err := c.Bind(request); err != nil {
 		a.Logger.Errorf("error creating account: %v", err)
 		helpers.SendError(c, &helpers.HttpError{
-			Message:    err.Error(),
-			StatusCode: http.StatusInternalServerError,
+			Message:    "request body invalid or malformed",
+			StatusCode: http.StatusBadRequest,
 			Op:         "create-account-controller",
 		})
 		return
@@ -60,7 +60,33 @@ func (a *AccountController) Show(c *gin.Context) {
 }
 
 func (a *AccountController) Update(c *gin.Context) {
+	id := c.Query("id")
+	request := &dtos.UpdateAccountRequestDTO{}
 
+	if err := c.Bind(request); err != nil {
+		a.Logger.Errorf("error creating account: %v", err)
+		helpers.SendError(c, &helpers.HttpError{
+			Message:    "request body invalid or malformed",
+			StatusCode: http.StatusBadRequest,
+			Op:         "update-account-controller",
+		})
+		return
+	}
+
+	if err := request.Validate(); err != nil {
+		a.Logger.Errorf("error update account: %v", err.Error())
+		helpers.SendError(c, err)
+		return
+	}
+
+	account, err := usecases.UpdateAccount(id, request, a.Service)
+	if err != nil {
+		a.Logger.Errorf("error update account: %v", err.Error())
+		helpers.SendError(c, err)
+		return
+	}
+
+	helpers.SendSuccess(c, "update-account-controller", account)
 }
 
 func (a *AccountController) Delete(c *gin.Context) {

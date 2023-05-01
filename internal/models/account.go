@@ -37,28 +37,3 @@ func (a *Account) Parse(request *dtos.CreateAccountRequestDTO) {
 
 	a.EncryptPass()
 }
-
-func (a *Account) Update(request *dtos.UpdateAccountRequestDTO) {
-	if request.Name != "" {
-		a.Name = request.Name
-	}
-	if request.Cpf != "" {
-		a.Cpf = request.Cpf
-	}
-	if request.Email != "" {
-		a.Email = request.Email
-	}
-	if request.Pass != "" {
-		a.Pass = request.Pass
-		a.EncryptPass()
-	}
-	if request.Type != "" {
-		a.Type = request.Type
-	}
-	if request.Activated != nil {
-		a.Activated = *request.Activated
-	}
-	if request.Balance > 0.0 {
-		a.Balance = request.Balance
-	}
-}
