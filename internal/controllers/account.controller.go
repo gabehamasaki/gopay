@@ -64,5 +64,15 @@ func (a *AccountController) Update(c *gin.Context) {
 }
 
 func (a *AccountController) Delete(c *gin.Context) {
+	id := c.Query("id")
 
+	if err := usecases.DeleteAccount(id, a.Service); err != nil {
+		a.Logger.Errorf("error deleting account: %v", err)
+		helpers.SendError(c, err)
+		return
+	}
+
+	helpers.SendSuccess(c, "delete-account-controller", gin.H{
+		"message": "Account deleted successfully",
+	})
 }

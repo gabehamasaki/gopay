@@ -41,7 +41,7 @@ func (s *AccountService) FindOne(id string) (*models.Account, error) {
 	if err != nil {
 		return nil, &helpers.HttpError{
 			Message:    "Could not be able to find account",
-			StatusCode: http.StatusInternalServerError,
+			StatusCode: http.StatusNotFound,
 			Op:         "account-find-one-service",
 		}
 	}
@@ -110,11 +110,7 @@ func (s *AccountService) Delete(id string) error {
 
 	acc, err := s.FindOne(id)
 	if err != nil {
-		return &helpers.HttpError{
-			Message:    err.Error(),
-			StatusCode: http.StatusInternalServerError,
-			Op:         "account-delete-service",
-		}
+		return err
 	}
 
 	if err := db.Delete(&acc).Error; err != nil {
