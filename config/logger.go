@@ -19,10 +19,10 @@ func NewLogger(p string) *Logger {
 	logger := log.New(writer, p, log.Ldate|log.Ltime)
 
 	return &Logger{
-		debug:   log.New(writer, "DEBUG: ", logger.Flags()),
-		info:    log.New(writer, "INFO: ", logger.Flags()),
-		warning: log.New(writer, "WARNING: ", logger.Flags()),
-		err:     log.New(writer, "ERROR: ", logger.Flags()),
+		debug:   log.New(writer, "\033[32m[DEBUG] \033[0m", logger.Flags()),
+		info:    log.New(writer, "\033[35m[INFO] \033[0m", logger.Flags()),
+		warning: log.New(writer, "\033[33m[WARNING] \033[0m", logger.Flags()),
+		err:     log.New(writer, "\033[31m[ERROR] \033[0m", logger.Flags()),
 		writer:  writer,
 	}
 }
