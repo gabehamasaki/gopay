@@ -2,7 +2,6 @@ package usecases
 
 import (
 	"fmt"
-	"net/http"
 
 	"github.com/gabehamasaki/gopay/internal/dtos"
 	"github.com/gabehamasaki/gopay/internal/helpers"
@@ -12,21 +11,6 @@ import (
 
 func CreateAccount(request *dtos.CreateAccountRequestDTO, service services.Service[models.Account]) (*models.Account, error) {
 
-	if exist, _ := service.FindByEmail(request.Email); exist != nil {
-		return nil, &helpers.HttpError{
-			Message:    "an account with that email already exists",
-			Op:         "account-use-cases",
-			StatusCode: http.StatusFound,
-		}
-	}
-
-	if exist, _ := service.FindByCpf(request.Cpf); exist != nil {
-		return nil, &helpers.HttpError{
-			Message:    "an account with that cpf already exists",
-			Op:         "account-use-cases",
-			StatusCode: http.StatusFound,
-		}
-	}
 
 	account := &models.Account{}
 	account.Parse(request)

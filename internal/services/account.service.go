@@ -2,6 +2,7 @@ package services
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/gabehamasaki/gopay/internal/helpers"
 	"github.com/gabehamasaki/gopay/internal/models"
@@ -17,6 +18,13 @@ func NewAccountService() *AccountService {
 func (s *AccountService) Create(a *models.Account) error {
 	err := db.Create(a).Error
 	if err != nil {
+		if strings.Contains(err.Error(), "duplicate") {
+			return &helpers.HttpError{
+				Message:    "cpf or email already exists",
+				StatusCode: http.StatusFound,
+				Op:         "account-create-service",
+			}
+		}
 		return &helpers.HttpError{
 			Message:    "Could not be able to create account",
 			StatusCode: http.StatusInternalServerError,
