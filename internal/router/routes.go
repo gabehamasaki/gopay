@@ -1,6 +1,7 @@
 package router
 
 import (
+	"github.com/gabehamasaki/gopay/config"
 	"github.com/gabehamasaki/gopay/internal/controllers"
 	"github.com/gabehamasaki/gopay/internal/middlewares"
 	"github.com/gabehamasaki/gopay/internal/services"
@@ -44,5 +45,6 @@ func initializeRoutes(r *gin.Engine) {
 func initializeControllers() {
 	accountController = &controllers.AccountController{
 		Service: services.NewAccountService(),
+		Logger: config.GetLogger("account-controller"),
 	}
 }
